@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask HTMX Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+</head>
+
+<body>
+
+    <!-- 主体内容 -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- 错误框 -->
+    <div id="error-box" style="display:none; color: red; margin-top: 10px;"></div>
+
+    <!-- HTMX 事件处理脚本 -->
+    <script>
+        document.body.addEventListener('htmx:responseError', function (event) {
+            var errorBox = document.getElementById('error-box');
+            try {
+                var errorData = JSON.parse(event.detail.xhr.responseText);
+                errorBox.textContent = errorData.error;
+            } catch (e) {
+                errorBox.textContent = "发生未知错误，请稍后再试。";
+            }
+            errorBox.style.display = 'block';
+            event.detail.shouldSwap = false;
+        });
+
+        document.body.addEventListener('htmx:beforeRequest', function (event) {
+            var errorBox = document.getElementById('error-box');
+            errorBox.style.display = 'none';
+        });
+    </script>
+
+</body>
+
+</html>

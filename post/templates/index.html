@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>HTMX 表单示例</h1>
+
+<form hx-post="/submit" hx-target=".container" hx-swap="innerHTML">
+    <input type="text" name="username" placeholder="输入用户名">
+    <button type="submit">提交</button>
+</form>
+
+<div id="content">
+    <p>这是主要内容区域，成功后将被替换。</p>
+</div>
+{% endblock %}
